@@ -1,3 +1,0 @@
-fmm_fw_regul: forward program for regular uniform spacing grid
-fmm_fw_regul2: forward program for regular non-uniform spacing grid
-fmm_fw_regul3: forward program for velocity in whole area, use slowness
