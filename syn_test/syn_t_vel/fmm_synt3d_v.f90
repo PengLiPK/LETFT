@@ -145,6 +145,31 @@ character(len=70) :: tpfile
 character(len=70) :: tfname(maxsource3d)
 character(len=70) :: tpsrname(maxsource3d)
 
+interface
+    subroutine cacut(isr,source,receiver,evnid,node,nr,nl,layer,&
+      &dx,dy,dz,minx,maxx,miny,maxy,minz,maxz,ttlgnum,rfxint,rfyint,rfzint,&
+      &rfxrg,rfyrg,rfzrg,tpminx,tpmaxx,tpminy,tpmaxy,tpxnum,tpynum,topozbtm,&
+      &topoxy,topoz,vair,imethod,icoodnt)
+        use strct
+        use fmarch
+        implicit none
+        type(srstrct3d) :: source
+        type(rcstrct3d) :: receiver(maxevn3d)
+        type(tstrct3d),target :: node(maxgrid3d)
+        type(tstrct) :: topoxy(maxgrid)
+        real(kind=8) :: layer(maxgrd1d,3)
+        real(kind=8) :: topoz(maxgrid)
+        real(kind=8) :: dx,dy,dz
+        real(kind=8) :: minx,maxx,miny,maxy,minz,maxz
+        real(kind=8) :: rfxint,rfyint,rfzint,rfxrg,rfyrg,rfzrg
+        real(kind=8) :: tpminx,tpmaxx,tpminy,tpmaxy,topozbtm
+        real(kind=8) :: vair
+        integer :: nl(3)
+        integer :: evnid(maxevn3d)
+        integer :: isr,nr,ttlgnum,tpxnum,tpynum,imethod,icoodnt
+    end subroutine
+end interface
+
 
 call cpu_time(start)
 call idate(date)
