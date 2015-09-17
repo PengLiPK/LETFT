@@ -1,5 +1,5 @@
 
-! This program caculate velocity in each grid.
+! This program prepare the synthetic velocity model from 1-D velocity model
 ! -----------------------------------------------------------------------
 program prevel3d
 
