@@ -114,11 +114,8 @@ open(35,file=outvf,status='replace')
 open(45,file=outvf2,status='replace')
 vg=0.0d0
 write(25,*)xgnum*ygnum*zgnum,xgnum,ygnum,zgnum
-write(25,*)xgnum*ygnum
 write(35,*)xgnum*ygnum*zgnum,xgnum,ygnum,zgnum
-write(35,*)xgnum*ygnum
 write(45,*)xgnum*ygnum*zgnum,xgnum,ygnum,zgnum
-write(45,*)xgnum*ygnum
 write(*,*)xgnum,ygnum,zgnum
 do iz=1,zgnum
     do iy=1,ygnum

@@ -145,31 +145,6 @@ character(len=70) :: tpfile
 character(len=70) :: tfname(maxsource3d)
 character(len=70) :: tpsrname(maxsource3d)
 
-interface
-    subroutine cacut(isr,source,receiver,evnid,node,nr,nl,layer,&
-      &dx,dy,dz,minx,maxx,miny,maxy,minz,maxz,ttlgnum,rfxint,rfyint,rfzint,&
-      &rfxrg,rfyrg,rfzrg,tpminx,tpmaxx,tpminy,tpmaxy,tpxnum,tpynum,topozbtm,&
-      &topoxy,topoz,vair,imethod,icoodnt)
-        use strct
-        use fmarch
-        implicit none
-        type(srstrct3d) :: source
-        type(rcstrct3d) :: receiver(maxevn3d)
-        type(tstrct3d),target :: node(maxgrid3d)
-        type(tstrct) :: topoxy(maxgrid)
-        real(kind=8) :: layer(maxgrd1d,3)
-        real(kind=8) :: topoz(maxgrid)
-        real(kind=8) :: dx,dy,dz
-        real(kind=8) :: minx,maxx,miny,maxy,minz,maxz
-        real(kind=8) :: rfxint,rfyint,rfzint,rfxrg,rfyrg,rfzrg
-        real(kind=8) :: tpminx,tpmaxx,tpminy,tpmaxy,topozbtm
-        real(kind=8) :: vair
-        integer :: nl(3)
-        integer :: evnid(maxevn3d)
-        integer :: isr,nr,ttlgnum,tpxnum,tpynum,imethod,icoodnt
-    end subroutine
-end interface
-
 
 call cpu_time(start)
 call idate(date)
@@ -298,7 +273,6 @@ do is=1,ns
         pevnum(ir)=evnum(irstart+ir-1)
         pevnid(ir)=evnid(irstart+ir-1)
     end do
-    write(*,*)"line304,nr",is,pevnum(1),nrcver(is),irstart
 
     call cacut(is,source(is),preceiver,pevnid,vinp,&
                &nrcver(is),nl,layer,dx,dy,dz,&
@@ -308,7 +282,7 @@ do is=1,ns
 !    call system('cp source00001.out rename.out')
 !    call rename('source00001.out','rename.out')
     write(*,*)"source",is,"has finished."
-    write(*,*)nt,"grids has been caculated."
+    write(*,*)nt,"nodes has been caculated."
 end do
 
 !-------------------------------------------------------------------------
@@ -320,14 +294,10 @@ write(*,2001)start,mid,(mid-start)/6.0d1
 do is=1,ns
 write(sourcenum,2005)is
 2005 format(i5.5)
-!tbyfdname(is)="tbyfd"//trim(sourcenum)//".txt"
     tfname(is)="t"//trim(sourcenum)//".txt"
-    tpsrname(is)="source"//trim(sourcenum)//".dat"
 end do
 
-!call mergefile(tbyfdname,ns,"tbyfd.txt",0)
 call mergefile(tfname,ns,"t.txt",0)
-call mergebf(tpsrname,ns,60,"tsource.dat",0)
 
 call idate(date)
 call itime(time)
@@ -656,7 +626,6 @@ rdz=dz/rfzint
 rcenter%x=(anint((source%x-minx)/rdx))*rdx+minx
 rcenter%y=(anint((source%y-miny)/rdy))*rdy+miny
 rcenter%z=(anint((source%z-minz)/rdz))*rdz+minz
-write(*,*)"Line344 center of refined area",rcenter%x,rcenter%y,rcenter%z
 
 ! Set up the four boundaries of refined area.
 if((rcenter%x-rfxrg) .lt. minx)then
@@ -705,9 +674,9 @@ rznum=rmaxzl-rminzl+1
 rttlgnum=rxnum*rynum*rznum
 !---------------------------------------------------------------------
 
-write(*,*)"The boundries refined area, as well as numbers of nodes:"
-write(*,*)rminx,rmaxx,rminy,rmaxy,rminz,rmaxz
-write(*,*)rminxl,rmaxxl,rminyl,rmaxyl,rminzl,rmaxzl
+!write(*,*)"The boundries refined area, as well as numbers of nodes:"
+!write(*,*)rminx,rmaxx,rminy,rmaxy,rminz,rmaxz
+!write(*,*)rminxl,rmaxxl,rminyl,rmaxyl,rminzl,rmaxzl
 
 
 ! Choose coordinate for refined grids
@@ -743,13 +712,10 @@ end do
             
 !---------------------------------------------------------------------
 
-write(*,*)"line1007,coord of refine grid end."
 
 
 ! Caculate velocity of refined grids with bilinear interpolation method.
 !-----------------------------------------------------------------------
-!open(230,file='refinevel.txt',status='replace')
-!write(230,*)rttlgnum
 do ig=1,rttlgnum
     if(rtravelt(ig)%z .gt. topozbtm)then
         call locatcood3d2(n,nl(1),layer(1:maxgrd1d,1),nl(2),&
@@ -790,14 +756,9 @@ do ig=1,rttlgnum
         end if
     end if
 
-!    write(230,3000)ig,rv(ig),rtravelt(ig)%x,rtravelt(ig)%y,rtravelt(ig)%z
-!3000 format(i6,1x,f10.7,1x,f15.9,1x,f15.9,1x,f15.9)
-!    pause
 end do
-!close(230)
 !----------------------------------------------------------------------
 
-write(*,*)"line993, refinevel done!"
 
 ! Caculate velocity of source.
 !----------------------------------------------------------------------
@@ -819,8 +780,8 @@ ssr=trilinear2(node(n(1))%t,node(n(2))%t,&
 rip=0 ! Counter of living grid node 
 ist=-1 ! Counter of updating living grid nodes with same travel time
 rcnum=1-rminxl-rminyl*rxnum-rminzl*rxnum*rynum
-write(*,*)"rxnum,rynum,rznum",rxnum,rynum,rznum
-write(*,*)"rcnum, rttlgnum, rdx, rdy, rdz",rcnum,rttlgnum,rdx,rdy,rdz
+!write(*,*)"rxnum,rynum,rznum",rxnum,rynum,rznum
+!write(*,*)"rcnum, rttlgnum, rdx, rdy, rdz",rcnum,rttlgnum,rdx,rdy,rdz
 ! Initial travel times of 7 nodes around rcenter.
 call sphdist(source%x,source%y,source%z,&
   &rtravelt(rcnum)%x,rtravelt(rcnum)%y,&
@@ -828,11 +789,9 @@ call sphdist(source%x,source%y,source%z,&
 rtravelt(rcnum)%t=srdist*(ssr+rs(rcnum))/2.0d0
 rtravelt(rcnum)%stat=1
 rip=rip+1
-write(*,*)"line1067",rip
 
 prtravelt(rip)%p=>rtravelt(rcnum)
 ist=ist+1
-write(*,*)"line1069"
 do ix=-1,1,2
     rgnum=rcnum+ix 
     if((rgnum .ge. 1) .and. (rgnum .le. rttlgnum) .and.&
@@ -847,7 +806,6 @@ do ix=-1,1,2
         ist=ist+1
     end if
 end do
-write(*,*)"line1083"
 do iy=-1,1,2
     rgnum=rcnum+iy*rxnum
     if((rgnum .ge. 1) .and. (rgnum .le. rttlgnum) .and.&
@@ -876,20 +834,14 @@ do iz=-1,1,2
     end if
 end do
 !----------------------------------------------------------------------
-write(*,*)"line1096",rip
 
-do ix=1,rip
-    write(*,*)"line1104",ix,prtravelt(ix)%p%t,prtravelt(ix)%p%num
-end do
     
 
 ! Sort the initial values, with bubble sort method.
 !----------------------------------------------------------------------
 allocate(ptemp)
-write(*,*)"line1102",prtravelt(1)%p%t
 if(rip .gt. 1)then
     do ix=1,rip-1
-        ! write(*,*)"line1104",ix,prtravelt(ix)%p%t,prtravelt(ix)%p%num
         do iy=ix+1,rip
             if(prtravelt(iy)%p%t .lt. prtravelt(ix)%p%t)then
                 ptemp%p=>prtravelt(ix)%p
@@ -901,10 +853,10 @@ if(rip .gt. 1)then
 end if
 deallocate(ptemp)
 !---------------------------------------------------------------------        
-do ix=1,rip
-    write(*,*)ix,prtravelt(ix)%p%t,prtravelt(ix)%p%num
-end do
-write(*,*)"rxnum,rynum,rznum",rxnum,rynum,rznum,source%x,source%y,source%z
+!do ix=1,rip
+!    write(*,*)ix,prtravelt(ix)%p%t,prtravelt(ix)%p%num
+!end do
+!write(*,*)"rxnum,rynum,rznum",rxnum,rynum,rznum,source%x,source%y,source%z
 
 
 ! Check if the coordinate of outter grid is as same as refined grid. If
@@ -933,7 +885,6 @@ end do
 !----------------------------------------------------------------------
 
 
-write(*,*)"line1122,ip",ip,rip
 
 ! Refined grids caculation begins.
 !------------------------------------------------------------------------
@@ -950,7 +901,6 @@ j=1
 k=1
 nb=0
 nbtail=0
-write(*,*)"line1139,nbtail,ip",nbtail,ip,rfrg
 do while( (prtravelt(rip)%p%x .lt. rfrg(1)) .and.& 
 &         (prtravelt(rip)%p%x .gt. rfrg(2)) .and.&
 &         (prtravelt(rip)%p%y .lt. rfrg(3)) .and.&
@@ -968,7 +918,6 @@ do while( (prtravelt(rip)%p%x .lt. rfrg(1)) .and.&
             call march1(iipnum,rtravelt,rs,rxnum,rttlgnum,rdzz)
         else if(imethod .eq. 2)then
             j=j+1
-            !write(*,*)"iip,iipnum",iip,iipnum,prtravelt(iip)%p%stat
             call march2(iipnum,rtravelt,rs,rxnum,rynum,rttlgnum,&
                        &rdzz,nbnode,nbnum)
         else
@@ -1071,27 +1020,11 @@ do while( (prtravelt(rip)%p%x .lt. rfrg(1)) .and.&
 end do
 
 
-! i is loop times of caculation, j is the times of call "march" subroutine
-write(*,*)"Line578,loop i,subroutine march2 j",i,j,source%x,source%y,source%z
 
-
-! "refine.out" records the information of refined grids which are caculated
-! in this step
-!open(120,file='refine.out')
-!do iist=1,rip
-!    write(120,*)prtravelt(iist)%p
-!end do
-!close(120)
-
-!open(121,file='t_frm_refine.out')
-!do iist=1,ip
-!    write(121,*)ptravelt(iist)%p
-!end do
-!close(121)
 !-------------------------------------------------------------------------
 
 
-write(*,*)"Refine part ends!"
+!write(*,*)"Refine part ends!"
 
 
 
@@ -1099,8 +1032,6 @@ write(*,*)"Refine part ends!"
 !------------------------------------------------------------------------
 
 ist=ip-1
-!open(232,file='vfile.txt')
-!write(232,*)ttlgnum
 do ig=1,ttlgnum
     if(travelt(ig)%z .gt. topozbtm)then
         call locatcood3d2(n,nl(1),layer(1:maxgrd1d,1),nl(2),&
@@ -1140,9 +1071,7 @@ do ig=1,ttlgnum
             stop
         end if
     end if
-!    write(232,3000)ig,drstemp,travelt(ig)%x,travelt(ig)%y,travelt(ig)%z
 end do
-!close(232)
 
 
 i=1
@@ -1152,7 +1081,6 @@ nb=0
 nbtail=0
 !open(233,file='temp_ptravelt.txt')
 
-!write(*,*)"line755"
 ! Update live, narrow band grid.
 !-------------------------------------------------------------------------
 do while(ip .lt. ttlgnum)
@@ -1161,7 +1089,6 @@ do while(ip .lt. ttlgnum)
     !-------------------------------------------------------------------------
     tempnbnum=0
     do iip=ip-ist,ip
-!        write(233,*)ptravelt(iip)%p
         iipnum=ptravelt(iip)%p%num
         if(imethod .eq. 1)then
             call march1(iipnum,travelt,s,xnum,ttlgnum,dzz)
@@ -1225,8 +1152,6 @@ end do
 !-------------------------------------------------------------------------
 
 
-! i is loop times of caculation, j is the times of call "march" subroutine
-write(*,*)"line672,loop i,subroutine march2",i,j,source%x,source%y,source%z
 
 
 ! Find the ray path and frechet derivative
@@ -1251,38 +1176,11 @@ do ir=1,nr
     write(110,2200)receiver(ir)%t,source%x,source%y,source%z,evnid(ir),&
                   &receiver(ir)%x,receiver(ir)%y,receiver(ir)%z
 end do
+1000 format(i5.5)
 2200 format(f16.12,1x,f9.5,1x,f8.5,1x,f5.3,1x,i6,1x,f9.5,1x,f8.5,1x,f6.3)
 
 close(110)
 !------------------------------------------------------------------------
-
-
-! Write travel time in files.
-!------------------------------------------------------------------------
-write(sourcenum,1000)isr
-1000 format(i5.5)
-tfilename="source"//trim(sourcenum)//".dat"
-write(*,*)tfilename
-errfname="err"//trim(sourcenum)//".txt"
-
-open(102,file=tfilename,status='replace',form='unformatted',&
-    &access='direct',recl=60)
-open(108,file=errfname,status='replace')
-do ist=1,ip-1
-    if(ptravelt(ist)%p%t .gt. ptravelt(ist+1)%p%t)then
-        write(108,*)ist+1,ptravelt(ist+1)%p,&
-        &   ptravelt(ist+1)%p%t-ptravelt(ist)%p%t
-    end if
-end do
-do ist=1,ip
-    write(102,rec=ist)ptravelt(ist)%p
-!    write(103,1001)travelt(ist)
-!1001 format(1x,f16.12,1x,f16.12,1x,f16.12,1x,f16.12,1x,f16.12,1x,f16.12,1x,i6.6,1x,i1)
-end do
-close(102)    
-!close(103)
-close(108)
-!-------------------------------------------------------------------------
 
 
 deallocate(ptravelt)
