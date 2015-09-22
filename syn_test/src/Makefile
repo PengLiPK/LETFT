@@ -2,13 +2,14 @@ fc=gfortran
 
 obj_fmmsynt3d = fmm_synt3d_v.o strct.o fmarch.o
 obj_prevel3d = prevel3d.o strct.o
+obj_genGSnoise = genGSnoise.o strct.o
 obj_migraloc = migraloc.o strct.o
 obj_fmmfwregul2tprl = fmm_fw_regul2tprl.o strct.o fmarch.o
 obj_invctrlds = invctrlds.o strct.o
 obj_dloc2locmulti = dloc2loc_multi.o strct.o
 
 
-all: strct.o fmarch.o solver.o fmm_synt3d_v prevel3d \
+all: strct.o fmarch.o solver.o fmm_synt3d_v prevel3d genGSnoise\
 	 migraloc fmm_fw_regul2tprl fd2csm_row fdsep_qr \
 	 fd2csm calmdres2 invsvddt_damp invctrlds invloc_svd_wei \
 	 dloc2loc_multi mdresolmat
@@ -21,6 +22,10 @@ prevel3d : $(obj_prevel3d)
 	$(fc) -o prevel3d $(obj_prevel3d)
 prevel3d.o : prevel3d.f90
 	$(fc) -c prevel3d.f90
+genGSnoise : $(obj_genGSnoise)
+	$(fc) -o genGSnoise $(obj_genGSnoise)
+genGSnoise.o : genGSnoise.f90
+	$(fc) -c genGSnoise.f90
 migraloc : $(obj_migraloc)
 	$(fc) -o migraloc $(obj_migraloc)
 migraloc.o : migraloc.f90

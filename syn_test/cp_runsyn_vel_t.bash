@@ -2,7 +2,7 @@
 
 # Parameters of working dir
 #######################################################
-wkdir=work
+wkdir=syn_work
 inpfdir=input_file
 #######################################################
 
@@ -47,6 +47,15 @@ fmm_rf_y=0.045
 fmm_rf_z=5
 #######################################################
 
+# Paramters of constructing input data for synthetic tomograpy.
+#######################################################
+gs_mean=0
+gs_std=0.5
+loc_amp=1
+ot_amp=0.1
+#######################################################
+
+
 
 # Check working dir is exist or not.
 if [ ! -d $wkdir ]
@@ -57,6 +66,11 @@ fi
 if [ ! -d $wkdir/syn_vel_t/ ]
 then
 	mkdir $wkdir/syn_vel_t/
+fi
+
+if [ ! -d $wkdir/syn_outf/ ]
+then
+	mkdir $wkdir/syn_outf/
 fi
 
 # Enter $wkdir/syn_vel_t
@@ -70,11 +84,12 @@ cp ../../$inpfdir/$data_file .
 
 cp ../../src/prevel3d .
 cp ../../src/fmm_synt3d_v .
+cp ../../src/genGSnoise .
 
 # Generate synthetic velocity model from 1D velocity model.
 echo "$node_structure" > prevel3d.inp
-echo "syndvel_10per.txt" >> prevel3d.inp
-echo "synvel_10per.txt" >> prevel3d.inp
+echo "syndvel.txt" >> prevel3d.inp
+echo "synvel.txt" >> prevel3d.inp
 echo "synvel_init.txt" >> prevel3d.inp
 echo "$vel_pertubation" >> prevel3d.inp
 echo "$oned_vel" >> prevel3d.inp
@@ -88,7 +103,7 @@ echo "$topo_vair" >> prevel3d.inp
 
 # Generate synthetic travel time data from synthetic velocity model.
 echo "$data_file" > fmm_synt3d_v.inp
-echo "synvel_10per.txt" >> fmm_synt3d_v.inp
+echo "synvel.txt" >> fmm_synt3d_v.inp
 echo "$sta_num" >> fmm_synt3d_v.inp
 echo "$fmm_dx $fmm_dy $fmm_dz" >> fmm_synt3d_v.inp
 echo "$fmm_rf_nx $fmm_rf_ny $fmm_rf_nz" >> fmm_synt3d_v.inp
@@ -105,3 +120,26 @@ echo "$topo_xnum $topo_ynum" >> fmm_synt3d_v.inp
 echo "$topo_depth" >> fmm_synt3d_v.inp
 echo "$topo_vair" >> fmm_synt3d_v.inp
 ./fmm_synt3d_v
+mv t.txt syndata.txt
+
+# Add Gaussian noise to the locations and origin times of synthetic data.
+# The output files will be used as input data for synthetic tomography.
+echo "2" > genGSnoise.inp
+echo "syndata.txt" >> genGSnoise.inp
+echo "syndata_init.txt" >> genGSnoise.inp
+echo "$sta_num" >> genGSnoise.inp
+echo "$minlon $maxlon" >> genGSnoise.inp
+echo "$minlan $maxlan" >> genGSnoise.inp
+echo "$minz $maxz" >> genGSnoise.inp
+echo "$gs_mean $gs_std $loc_amp $ot_amp" >> genGSnoise.inp
+echo "2" >> genGSnoise.inp
+echo "$topo_file" >> genGSnoise.inp
+echo "$topo_minlon $topo_maxlon" >> genGSnoise.inp
+echo "$topo_minlan $topo_maxlan" >> genGSnoise.inp
+echo "$topo_xnum $topo_ynum" >> genGSnoise.inp
+./genGSnoise
+
+cp syndata.txt syndata_init.txt synvel.txt synvel_init.txt ../syn_outf
+
+# Exit working dir
+cd ../../
