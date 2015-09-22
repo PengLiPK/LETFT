@@ -1,7 +1,7 @@
 #!/bin/bash
 
-cp syndataloc_2km10_1dinitcheck.txt syndataloc.txt
-cp initvel_3km1d.txt vel.txt
+cp syndata_init.txt syndataloc.txt
+cp synvel_init.txt vel.txt
 vmodel=vel.txt
 damp=100
 nevn=2493

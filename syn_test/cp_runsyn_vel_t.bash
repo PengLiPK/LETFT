@@ -85,6 +85,7 @@ cp ../../$inpfdir/$data_file .
 cp ../../src/prevel3d .
 cp ../../src/fmm_synt3d_v .
 cp ../../src/genGSnoise .
+cp ../../src/migraloc .
 
 # Generate synthetic velocity model from 1D velocity model.
 echo "$node_structure" > prevel3d.inp
@@ -126,7 +127,7 @@ mv t.txt syndata.txt
 # The output files will be used as input data for synthetic tomography.
 echo "2" > genGSnoise.inp
 echo "syndata.txt" >> genGSnoise.inp
-echo "syndata_init.txt" >> genGSnoise.inp
+echo "syndata_init_temp.txt" >> genGSnoise.inp
 echo "$sta_num" >> genGSnoise.inp
 echo "$minlon $maxlon" >> genGSnoise.inp
 echo "$minlan $maxlan" >> genGSnoise.inp
@@ -138,6 +139,16 @@ echo "$topo_minlon $topo_maxlon" >> genGSnoise.inp
 echo "$topo_minlan $topo_maxlan" >> genGSnoise.inp
 echo "$topo_xnum $topo_ynum" >> genGSnoise.inp
 ./genGSnoise
+
+# Migrate the locations above surface below the surface.
+echo "syndata_init_temp.txt" >> migraloc.inp
+echo "syndata_init.txt" >> migraloc.inp
+echo "$sta_num" >> migraloc.inp
+echo "$topo_file" >> migraloc.inp
+echo "$topo_minlon $topo_maxlon" >> migraloc.inp
+echo "$topo_minlan $topo_maxlan" >> migraloc.inp
+echo "$topo_xnum $topo_ynum" >> migraloc.inp
+./migraloc
 
 cp syndata.txt syndata_init.txt synvel.txt synvel_init.txt ../syn_outf
 

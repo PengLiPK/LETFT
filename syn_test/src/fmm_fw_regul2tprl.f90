@@ -299,7 +299,6 @@ do is=1,ns
         pevnid(ir)=evnid(irstart+ir-1)
         pevnum(ir)=evnum(irstart+ir-1)
     end do
-    write(*,*)"line304,nr",is,pevnum(1),nrcver(is),irstart
 
     call cacut(is,source(is),preceiver,pevnid,ttlevn,pevnum,node,nnode,&
                &nrcver(is),nl,layer,dx,dy,dz,&
@@ -594,7 +593,6 @@ character(len=70) :: fdfname
 character(len=70) :: tfname
 
 
-!write(*,*)"vnum",vnum
 ! initial grid are all far away
 travelt%stat=-1
 travelt%nbstat=0
@@ -665,7 +663,6 @@ rdz=dz/rfzint
 rcenter%x=(anint((source%x-minx)/rdx))*rdx+minx
 rcenter%y=(anint((source%y-miny)/rdy))*rdy+miny
 rcenter%z=(anint((source%z-minz)/rdz))*rdz+minz
-write(*,*)"Line344 center of refined area",rcenter%x,rcenter%y,rcenter%z
 
 ! Set up the four boundaries of refined area.
 if((rcenter%x-rfxrg) .lt. minx)then
@@ -714,10 +711,6 @@ rznum=rmaxzl-rminzl+1
 rttlgnum=rxnum*rynum*rznum
 !---------------------------------------------------------------------
 
-write(*,*)"The boundries refined area, as well as numbers of nodes:"
-write(*,*)rminx,rmaxx,rminy,rmaxy,rminz,rmaxz
-write(*,*)rminxl,rmaxxl,rminyl,rmaxyl,rminzl,rmaxzl
-
 
 ! Choose coordinate for refined grids
 !--------------------------------------------------------------------
@@ -752,7 +745,6 @@ end do
             
 !---------------------------------------------------------------------
 
-write(*,*)"line1007,coord of refine grid end."
 
 
 ! Caculate velocity of refined grids with bilinear interpolation method.
@@ -806,7 +798,6 @@ end do
 !close(230)
 !----------------------------------------------------------------------
 
-write(*,*)"line993, refinevel done!"
 
 ! Caculate velocity of source.
 !----------------------------------------------------------------------
@@ -830,8 +821,6 @@ ssr=trilinear2(node(n(1))%t,node(n(2))%t,&
 rip=0 ! Counter of living grid node 
 ist=-1 ! Counter of updating living grid nodes with same travel time
 rcnum=1-rminxl-rminyl*rxnum-rminzl*rxnum*rynum
-write(*,*)"rxnum,rynum,rznum",rxnum,rynum,rznum
-write(*,*)"rcnum, rttlgnum, rdx, rdy, rdz",rcnum,rttlgnum,rdx,rdy,rdz
 ! Initial travel times of 7 nodes around rcenter.
 call sphdist(source%x,source%y,source%z,&
   &rtravelt(rcnum)%x,rtravelt(rcnum)%y,&
@@ -839,11 +828,9 @@ call sphdist(source%x,source%y,source%z,&
 rtravelt(rcnum)%t=srdist*(ssr+rs(rcnum))/2.0d0
 rtravelt(rcnum)%stat=1
 rip=rip+1
-write(*,*)"line1067",rip
 
 prtravelt(rip)%p=>rtravelt(rcnum)
 ist=ist+1
-write(*,*)"line1069"
 do ix=-1,1,2
     rgnum=rcnum+ix 
     if((rgnum .ge. 1) .and. (rgnum .le. rttlgnum) .and.&
@@ -858,7 +845,6 @@ do ix=-1,1,2
         ist=ist+1
     end if
 end do
-write(*,*)"line1083"
 do iy=-1,1,2
     rgnum=rcnum+iy*rxnum
     if((rgnum .ge. 1) .and. (rgnum .le. rttlgnum) .and.&
@@ -887,20 +873,13 @@ do iz=-1,1,2
     end if
 end do
 !----------------------------------------------------------------------
-write(*,*)"line1096",rip
 
-do ix=1,rip
-    write(*,*)"line1104",ix,prtravelt(ix)%p%t,prtravelt(ix)%p%num
-end do
-    
 
 ! Sort the initial values, with bubble sort method.
 !----------------------------------------------------------------------
 allocate(ptemp)
-write(*,*)"line1102",prtravelt(1)%p%t
 if(rip .gt. 1)then
     do ix=1,rip-1
-        ! write(*,*)"line1104",ix,prtravelt(ix)%p%t,prtravelt(ix)%p%num
         do iy=ix+1,rip
             if(prtravelt(iy)%p%t .lt. prtravelt(ix)%p%t)then
                 ptemp%p=>prtravelt(ix)%p
@@ -912,10 +891,6 @@ if(rip .gt. 1)then
 end if
 deallocate(ptemp)
 !---------------------------------------------------------------------        
-do ix=1,rip
-    write(*,*)ix,prtravelt(ix)%p%t,prtravelt(ix)%p%num
-end do
-write(*,*)"rxnum,rynum,rznum",rxnum,rynum,rznum,source%x,source%y,source%z
 
 
 ! Check if the coordinate of outter grid is as same as refined grid. If
@@ -944,7 +919,6 @@ end do
 !----------------------------------------------------------------------
 
 
-write(*,*)"line1122,ip",ip,rip
 
 ! Refined grids caculation begins.
 !------------------------------------------------------------------------
@@ -961,7 +935,6 @@ j=1
 k=1
 nb=0
 nbtail=0
-write(*,*)"line1139,nbtail,ip",nbtail,ip,rfrg
 do while( (prtravelt(rip)%p%x .lt. rfrg(1)) .and.& 
 &         (prtravelt(rip)%p%x .gt. rfrg(2)) .and.&
 &         (prtravelt(rip)%p%y .lt. rfrg(3)) .and.&
@@ -979,7 +952,6 @@ do while( (prtravelt(rip)%p%x .lt. rfrg(1)) .and.&
             call march1(iipnum,rtravelt,rs,rxnum,rttlgnum,rdzz)
         else if(imethod .eq. 2)then
             j=j+1
-            !write(*,*)"iip,iipnum",iip,iipnum,prtravelt(iip)%p%stat
             call march2(iipnum,rtravelt,rs,rxnum,rynum,rttlgnum,&
                        &rdzz,nbnode,nbnum)
         else
@@ -1082,30 +1054,6 @@ do while( (prtravelt(rip)%p%x .lt. rfrg(1)) .and.&
 end do
 
 
-! i is loop times of caculation, j is the times of call "march" subroutine
-write(*,*)"Line578,loop i,subroutine march2 j",i,j,source%x,source%y,source%z
-
-
-! "refine.out" records the information of refined grids which are caculated
-! in this step
-!open(120,file='refine.out')
-!do iist=1,rip
-!    write(120,*)prtravelt(iist)%p
-!end do
-!close(120)
-
-!open(121,file='t_frm_refine.out')
-!do iist=1,ip
-!    write(121,*)ptravelt(iist)%p
-!end do
-!close(121)
-!-------------------------------------------------------------------------
-
-
-write(*,*)"Refine part ends!"
-
-
-
 ! Caculate non-refined ereas. Line553
 !------------------------------------------------------------------------
 
@@ -1164,7 +1112,6 @@ nb=0
 nbtail=0
 !open(233,file='temp_ptravelt.txt')
 
-!write(*,*)"line755"
 ! Update live, narrow band grid.
 !-------------------------------------------------------------------------
 do while(ip .lt. ttlgnum)
@@ -1236,9 +1183,6 @@ end do
 !close(233)
 !-------------------------------------------------------------------------
 
-
-! i is loop times of caculation, j is the times of call "march" subroutine
-write(*,*)"line672,loop i,subroutine march2",i,j,source%x,source%y,source%z
 
 
 ! Find the ray path and frechet derivative
@@ -1330,7 +1274,6 @@ close(110)
 write(sourcenum,1000)isr
 1000 format(i5.5)
 tfilename="source"//trim(sourcenum)//".dat"
-write(*,*)tfilename
 errfname="err"//trim(sourcenum)//".txt"
 
 !open(102,file=tfilename,status='replace',form='unformatted',&

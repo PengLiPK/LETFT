@@ -2,15 +2,15 @@
 
 # Parameters of working dir
 #######################################################
-wkdir=work
+wkdir=syn_work
 inpfdir=input_file
 #######################################################
 
 # Parameters of topography file
 #######################################################
 topo_file=hawaii_tp4tomo2.xyz
-initvel_file=initvel_3km1d.txt
-data_file=syndataloc_2km10_1dinitcheck.txt
+initvel_file=synvel_init.txt
+data_file=syndata_init.txt
 #######################################################
 
 # Check working dir is exist or not.
@@ -27,8 +27,8 @@ fi
 		
 # Copy input files
 cp ./$inpfdir/$topo_file ./$wkdir/syn_tomo/
-cp ./$inpfdir/$initvel_file ./$wkdir/syn_tomo/
-cp ./$inpfdir/$data_file ./$wkdir/syn_tomo/
+cp ./$wkdir/syn_outf/$initvel_file ./$wkdir/syn_tomo/
+cp ./$wkdir/syn_outf/$data_file ./$wkdir/syn_tomo/
 
 
 # Copy files to tomography directory
