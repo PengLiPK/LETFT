@@ -1,8 +1,12 @@
-1. fmm_synt3d_v prevel3d ( Synthetic velocity and travel time data)
+1. Data preparation
+   fmm_synt3d_v prevel3d ( Synthetic velocity and travel time data)
+   genGSnoise ( Genarate input data for synthetic test, adding 
+   noise to the locations and origin times)
+   * addns.py ( Add noise to the travel times of the input data)
+   migraloc (Move the locations in input data to subsurface)
 
-2. migraloc (Move the original locations to subsurface)
-
-3. fmm_fw_regul2tprl
+2. Synthetic tomography
+    fmm_fw_regul2tprl
 	fd2csm_row
 	fdsep_qr
 	fd2csm
@@ -12,5 +16,7 @@
 	invloc_svd_wei
 	dloc2loc_multi
 
-3. mdresolmat ( Model resolution matrix)
+3. Model evaluation
+   mdresolmat ( Model resolution matrix)
 
+4. Plotting
