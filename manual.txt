@@ -1,3 +1,5 @@
+
+Synthetic test
 1. Data preparation
    fmm_synt3d_v prevel3d ( Synthetic velocity and travel time data)
    genGSnoise ( Genarate input data for synthetic test, adding 
@@ -20,3 +22,12 @@
    mdresolmat ( Model resolution matrix)
 
 4. Plotting
+
+
+Real data tomography
+
+1. Tomography
+
+2. Model evaluation
+
+3. Plotting
