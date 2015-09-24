@@ -14,7 +14,7 @@ all: strct.o fmarch.o solver.o fmm_synt3d_v prevel3d genGSnoise\
 	 migraloc fmm_fw_regul2tprl fd2csm_row fdsep_qr fdsep_qr_wei\
 	 fd2csm calmdres2 invsvddt_damp invsvddt_damp_ps \
 	 invctrlds invloc_svd_wei dloc2loc_multi mdresolmat \
-	 mdresolmat_ps comb_ps
+	 mdresolmat_ps comb_ps initinpv
 
 fmm_synt3d_v : $(obj_fmmsynt3d)
 	$(fc) -o fmm_synt3d_v $(obj_fmmsynt3d)
@@ -72,6 +72,8 @@ mdresolmat_ps : mdresolmat_ps.f90
 	$(fc) -mcmodel=medium -L$(libdir) -o mdresolmat_ps mdresolmat_ps.f90 -llapack -lrefblas
 comb_ps : comb_ps.f90
 	$(fc) -o comb_ps comb_ps.f90
+initinpv : initinpv.f90 strct.o
+	$(fc) -o initinpv initinpv.f90 strct.o
 strct.o : strct.f90
 	$(fc) -c strct.f90
 fmarch.o : fmarch.f90
