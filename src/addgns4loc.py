@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 
 import numpy as np
-from addgns4loc_config.py import *
+from addgns4loc_config import *
 
 # Generate gaussion noise
 # (Mean, STD, numbers)
@@ -24,7 +24,7 @@ for i in range(1,nstap+1):
 	outf.write(hd2)
 
 	hd1tmp = hd1.split()
-	print hd1tmp[0]
+	# print hd1tmp[0]
 	
 	for j in range(1,int(hd1tmp[0])+1):
 		data = inpf.readline()
@@ -71,7 +71,7 @@ for i in range(1,nstas+1):
 	outf.write(hd2)
 
 	hd1tmp = hd1.split()
-	print hd1tmp[0]
+	# print hd1tmp[0]
 	
 	for j in range(1,int(hd1tmp[0])+1):
 		data = inpf.readline()

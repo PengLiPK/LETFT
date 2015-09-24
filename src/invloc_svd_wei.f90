@@ -149,7 +149,7 @@ do im=1,nevn
         end do
         resavg=sqrt(resavg/dble(nrow(im)))
 
-        write(*,*)im,"finished!"
+        !write(*,*)im,"finished!"
     end if
 
     ! Output

@@ -1,4 +1,4 @@
-GFORTRAN module version '0' created from strct.f90 on Tue Sep 22 21:11:39 2015
+GFORTRAN module version '0' created from strct.f90 on Tue Sep 22 21:06:16 2015
 MD5:f6d6fcc75e60cf8d070a1adf86ca1afc -- If you edit this, you'll get what you deserve.
 
 (() () () () () () () () () () () () () () () () () () () () () () () ()

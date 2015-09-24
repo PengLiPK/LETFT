@@ -1,4 +1,5 @@
 fc=gfortran
+libdir=/nethome/pli/lib
 
 obj_fmmsynt3d = fmm_synt3d_v.o strct.o fmarch.o
 obj_prevel3d = prevel3d.o strct.o
@@ -11,8 +12,9 @@ obj_dloc2locmulti = dloc2loc_multi.o strct.o
 
 all: strct.o fmarch.o solver.o fmm_synt3d_v prevel3d genGSnoise\
 	 migraloc fmm_fw_regul2tprl fd2csm_row fdsep_qr \
-	 fd2csm calmdres2 invsvddt_damp invctrlds invloc_svd_wei \
-	 dloc2loc_multi mdresolmat
+	 fd2csm calmdres2 invsvddt_damp invsvddt_damp_ps \
+	 invctrlds invloc_svd_wei dloc2loc_multi mdresolmat \
+	 mdresolmat_ps comb_ps
 
 fmm_synt3d_v : $(obj_fmmsynt3d)
 	$(fc) -o fmm_synt3d_v $(obj_fmmsynt3d)
@@ -49,19 +51,25 @@ calmdres2 : calmdres2.o
 calmdres2.o : calmdres2.f90
 	$(fc) -c calmdres2.f90
 invsvddt_damp : invsvddt_damp.f90
-	$(fc) -mcmodel=medium -L/nethome/pli/lib -o invsvddt_damp invsvddt_damp.f90 -llapack -lrefblas
+	$(fc) -mcmodel=medium -L$(libdir) -o invsvddt_damp invsvddt_damp.f90 -llapack -lrefblas
+invsvddt_damp_ps : invsvddt_damp_ps.f90
+	$(fc) -mcmodel=medium -L$(libdir) -o invsvddt_damp_ps invsvddt_damp_ps.f90 -llapack -lrefblas
 invctrlds : $(obj_invctrlds)
 	$(fc) -o invctrlds $(obj_invctrlds)
 invctrlds.o : invctrlds.f90
 	$(fc) -c invctrlds.f90
 invloc_svd_wei : invloc_svd_wei.f90 strct.o
-	$(fc) -mcmodel=medium -L/nethome/pli/lib -o invloc_svd_wei invloc_svd_wei.f90 strct.o -llapack -lrefblas
+	$(fc) -mcmodel=medium -L$(libdir) -o invloc_svd_wei invloc_svd_wei.f90 strct.o -llapack -lrefblas
 dloc2loc_multi : $(obj_dloc2locmulti)
 	$(fc) -o dloc2loc_multi $(obj_dloc2locmulti)
 dloc2loc_multi.o : dloc2loc_multi.f90
 	$(fc) -c dloc2loc_multi.f90
 mdresolmat : mdresolmat.f90
-	$(fc) -mcmodel=medium -L/nethome/pli/lib -o mdresolmat mdresolmat.f90 -llapack -lrefblas
+	$(fc) -mcmodel=medium -L$(libdir) -o mdresolmat mdresolmat.f90 -llapack -lrefblas
+mdresolmat_ps : mdresolmat_ps.f90
+	$(fc) -mcmodel=medium -L$(libdir) -o mdresolmat_ps mdresolmat_ps.f90 -llapack -lrefblas
+comb_ps : comb_ps.f90
+	$(fc) -o comb_ps comb_ps.f90
 strct.o : strct.f90
 	$(fc) -c strct.f90
 fmarch.o : fmarch.f90
