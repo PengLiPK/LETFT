@@ -1,5 +1,5 @@
-GFORTRAN module version '0' created from solver.f90 on Tue Sep 22 21:06:17 2015
-MD5:1e1ba20230e56f888fea2d3684c5a8bb -- If you edit this, you'll get what you deserve.
+GFORTRAN module version '0' created from solver.f90 on Thu Sep 24 11:02:37 2015
+MD5:4bc51f8a6a7db4e6c1b5eb07fb22914e -- If you edit this, you'll get what you deserve.
 
 (() () () () () () () () () () () () () () () () () () () () () () () ()
 () () ())
@@ -23,7 +23,7 @@ UNKNOWN IMPLICIT-SAVE) (INTEGER 4 0 0 INTEGER ()) 0 0 () (CONSTANT (
 INTEGER 4 0 0 INTEGER ()) 0 '4') () 0 () () () 0 0)
 18 'maxrow' 'solver' 'maxrow' 1 ((PARAMETER UNKNOWN-INTENT UNKNOWN-PROC
 UNKNOWN IMPLICIT-SAVE) (INTEGER 4 0 0 INTEGER ()) 0 0 () (CONSTANT (
-INTEGER 4 0 0 INTEGER ()) 0 '40') () 0 () () () 0 0)
+INTEGER 4 0 0 INTEGER ()) 0 '60') () 0 () () () 0 0)
 19 'qr' 'solver' 'qr' 1 ((PROCEDURE UNKNOWN-INTENT MODULE-PROC DECL
 UNKNOWN SUBROUTINE) (UNKNOWN 0 0 0 UNKNOWN ()) 20 0 (21 22 23 24) () 0 ()
 () () 0 0)
@@ -38,11 +38,11 @@ MODULE-PROC DECL UNKNOWN FUNCTION ALWAYS_EXPLICIT) (REAL 8 0 0 REAL ())
 21 'qt' '' 'qt' 20 ((VARIABLE INOUT UNKNOWN-PROC UNKNOWN UNKNOWN
 DIMENSION DUMMY) (REAL 8 0 0 REAL ()) 0 0 () (2 EXPLICIT (CONSTANT (
 INTEGER 4 0 0 INTEGER ()) 0 '1') (CONSTANT (INTEGER 4 0 0 INTEGER ()) 0
-'40') (CONSTANT (INTEGER 4 0 0 INTEGER ()) 0 '1') (CONSTANT (INTEGER 4 0
-0 INTEGER ()) 0 '40')) 0 () () () 0 0)
+'60') (CONSTANT (INTEGER 4 0 0 INTEGER ()) 0 '1') (CONSTANT (INTEGER 4 0
+0 INTEGER ()) 0 '60')) 0 () () () 0 0)
 22 'a' '' 'a' 20 ((VARIABLE INOUT UNKNOWN-PROC UNKNOWN UNKNOWN DIMENSION
 DUMMY) (REAL 8 0 0 REAL ()) 0 0 () (2 EXPLICIT (CONSTANT (INTEGER 4 0 0
-INTEGER ()) 0 '1') (CONSTANT (INTEGER 4 0 0 INTEGER ()) 0 '40') (
+INTEGER ()) 0 '1') (CONSTANT (INTEGER 4 0 0 INTEGER ()) 0 '60') (
 CONSTANT (INTEGER 4 0 0 INTEGER ()) 0 '1') (CONSTANT (INTEGER 4 0 0
 INTEGER ()) 0 '4')) 0 () () () 0 0)
 23 'nrow' '' 'nrow' 20 ((VARIABLE IN UNKNOWN-PROC UNKNOWN UNKNOWN DUMMY)

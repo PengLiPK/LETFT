@@ -11,7 +11,7 @@ obj_dloc2locmulti = dloc2loc_multi.o strct.o
 
 
 all: strct.o fmarch.o solver.o fmm_synt3d_v prevel3d genGSnoise\
-	 migraloc fmm_fw_regul2tprl fd2csm_row fdsep_qr \
+	 migraloc fmm_fw_regul2tprl fd2csm_row fdsep_qr fdsep_qr_wei\
 	 fd2csm calmdres2 invsvddt_damp invsvddt_damp_ps \
 	 invctrlds invloc_svd_wei dloc2loc_multi mdresolmat \
 	 mdresolmat_ps comb_ps
@@ -42,6 +42,8 @@ fd2csm_row.o : fd2csm_row.f90
 	$(fc) -c fd2csm_row.f90
 fdsep_qr : fdsep_qr.f90 solver.o
 	$(fc) -mcmodel=medium -o fdsep_qr fdsep_qr.f90 solver.o
+fdsep_qr_wei : fdsep_qr_wei.f90 solver.o strct.o
+	$(fc) -o fdsep_qr_wei fdsep_qr_wei.f90 solver.o strct.o
 fd2csm : fd2csm.o
 	$(fc) -o fd2csm fd2csm.o
 fd2csm.o : fd2csm.f90

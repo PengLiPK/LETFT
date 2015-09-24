@@ -1,6 +1,6 @@
 module solver
 
-integer,parameter :: maxrow=40
+integer,parameter :: maxrow=60
 integer,parameter :: maxcol=4
 
 contains
