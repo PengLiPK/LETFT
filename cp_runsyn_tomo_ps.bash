@@ -80,7 +80,7 @@ cp ./$wkdir/syn_outf/$data_file_s ./$wkdir/syn_tomo/
 cp ./src/fmm_fw_regul2tprl ./$wkdir/syn_tomo/
 cp ./src/comb_ps ./$wkdir/syn_tomo/
 cp ./src/fd2csm_row ./$wkdir/syn_tomo/
-cp ./src/fdsep_qr ./$wkdir/syn_tomo/
+cp ./src/fdsep_qr_wei ./$wkdir/syn_tomo/
 cp ./src/fd2csm ./$wkdir/syn_tomo/
 cp ./src/calmdres2 ./$wkdir/syn_tomo/
 cp ./src/invsvddt_damp_ps ./$wkdir/syn_tomo/
@@ -161,7 +161,7 @@ do
 # Separate slowness derivative matrix form fd
 
 	cat syndataloc_p.txt syndataloc_s.txt | awk '{if(NF==9)print $1,$9}' > tempt
-	paste t.txt tempt | awk '{print ($1+$6)-$2}' > dt.txt
+	paste t.txt tempt | awk '{print ($1+$3)-$2}' > dt.txt
 	j=$(( $i - 1 ))
 	cp dt.txt res_$j.txt
 	resrms2=$(awk '{a+=$1*$1}END{print sqrt(a/"'$ndata'")}' res_$j.txt)
@@ -170,20 +170,20 @@ do
 	echo "fd.dat" > fd2csm_row.inp
 	echo "metafd_row.dat" >> fd2csm_row.inp
 	echo "fdcsm_row.dat" >> fd2csm_row.inp
-	echo "$npdata" >> fd2csm_row.inp
+	echo "$ndata" >> fd2csm_row.inp
 	./fd2csm_row
 
 	
-	echo "metafd_row.dat" > fdsep_qr.inp
-	echo "fdcsm_row.dat" >> fdsep_qr.inp
-	echo "dt.txt" >> fdsep_qr.inp
-	echo "fdloc.dat" >> fdsep_qr.inp
-	echo "dtloc.txt" >> fdsep_qr.inp
-	echo "rloc.dat" >> fdsep_qr.inp
-	echo "fdsep.dat" >> fdsep_qr.inp
-	echo "dtsep.txt" >> fdsep_qr.inp
-	echo "$npdata $nevn $nmodel" >> fdsep_qr.inp
-	./fdsep_qr
+	echo "metafd_row.dat" > fdsep_qr_wei.inp
+	echo "fdcsm_row.dat" >> fdsep_qr_wei.inp
+	echo "dt.txt" >> fdsep_qr_wei.inp
+	echo "fdloc.dat" >> fdsep_qr_wei.inp
+	echo "dtloc.txt" >> fdsep_qr_wei.inp
+	echo "rloc.dat" >> fdsep_qr_wei.inp
+	echo "fdsep.dat" >> fdsep_qr_wei.inp
+	echo "dtsep.txt" >> fdsep_qr_wei.inp
+	echo "$ndata $nevn $nmodel" >> fdsep_qr_wei.inp
+	./fdsep_qr_wei
    
 
 # Prepare input for inverse
@@ -214,13 +214,13 @@ do
 	echo " Prepare input for inverse finished!"
 
 
-# Run invsvddt_damp
-    echo "dtsep.txt" > invsvddt_damp.inp
-    echo "metafd.dat" >> invsvddt_damp.inp
-	echo "fdcsm.dat" >> invsvddt_damp.inp
-    echo "out_dsl.txt" >> invsvddt_damp.inp
-    echo "$nsldata $npmodel $npmodel" >> invsvddt_damp.inp
-    echo "$dampp $damps" >> invsvddt_damp.inp
+# Run invsvddt_damp_ps
+    echo "dtsep.txt" > invsvddt_damp_ps.inp
+    echo "metafd.dat" >> invsvddt_damp_ps.inp
+	echo "fdcsm.dat" >> invsvddt_damp_ps.inp
+    echo "out_dsl.txt" >> invsvddt_damp_ps.inp
+    echo "$nsldata $npmodel $npmodel" >> invsvddt_damp_ps.inp
+    echo "$dampp $damps" >> invsvddt_damp_ps.inp
 
     ./invsvddt_damp_ps
 
@@ -312,7 +312,7 @@ do
 	echo "fd.dat" > fd2csm_row.inp
 	echo "metafd_row.dat" >> fd2csm_row.inp
 	echo "fdcsm_row.dat" >> fd2csm_row.inp
-	echo "$npdata" >> fd2csm_row.inp
+	echo "$ndata" >> fd2csm_row.inp
 	./fd2csm_row
 
 	cat syndataloc_p.txt syndataloc_s.txt |  awk '{if(NF==9)print $1,$9}' > tempt

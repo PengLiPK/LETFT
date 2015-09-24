@@ -167,7 +167,7 @@ tail -1 elev_line.txt | awk '{print $1,0.000,0.000}' >> elev_poly.txt
 echo "0.00000 0.00000 0.000000" >> elev_poly.txt
 
 # Plot velocity and pertubation of velocity
-bash plot_v_xyz.bash $thrshd
+bash plot_v_xyz.bash $thrshd $onedvfile
 cp *.ps *.eps ../$inpfdir
 
 # Exit dir
