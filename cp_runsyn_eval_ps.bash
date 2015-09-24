@@ -19,7 +19,7 @@ topo_xnum=96
 topo_ynum=96
 topo_depth=9.673
 topo_vair_p=2.0
-topo_vair_s=2.0
+topo_vair_s=1.15
 #######################################################
 
 # Parameters of model evaluation

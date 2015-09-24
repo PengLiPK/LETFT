@@ -2,10 +2,10 @@
 
 # Parameters of working dir
 #######################################################
-wkdir=work
-inpfdir=outf
+wkdir=syn_work_p
+inpfdir=syn_outf
 inpfdir_1dv=input_file
-plotdir=plot
+plotdir=syn_plot
 #######################################################
 
 # Parameters of input files
@@ -48,13 +48,13 @@ dz=0.5
 if [ ! -d $wkdir ]
 then
 	echo "There is no dir called $wkdir!"
-	echo "You need to run cp_run_init.bash first!"
+	echo "You need to run cp_runsyn_vel_t.bash first!"
 	exit
 fi
 if [ ! -d $wkdir/$inpfdir/ ]
 then
 	echo "There is no dir called $wkdir/$inpfdir/!"
-	echo "You need to run cp_run_tomo.bash first!"
+	echo "You need to run cp_runsyn_tomo.bash first!"
 	exit
 fi
 if [ ! -d $wkdir/$plotdir/ ]
@@ -167,7 +167,7 @@ tail -1 elev_line.txt | awk '{print $1,0.000,0.000}' >> elev_poly.txt
 echo "0.00000 0.00000 0.000000" >> elev_poly.txt
 
 # Plot velocity and pertubation of velocity
-bash plot_v_xyz.bash $thrshd
+bash plot_v_xyz.bash $thrshd $onedvfile
 cp *.ps *.eps ../$inpfdir
 
 # Exit dir
