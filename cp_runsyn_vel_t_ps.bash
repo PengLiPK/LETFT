@@ -33,7 +33,7 @@ vel_pertubation=0.1 # 0.1 is 10% from 1D velocity model.
 data_file_p=p_data.txt
 data_file_s=s_data.txt
 sta_num_p=35
-sta_num_s=35
+sta_num_s=34
 minlon=204.50
 maxlon=205.20
 minlan=19.20
@@ -83,12 +83,14 @@ cd $wkdir/syn_vel_t
 # Copy input files
 cp ../../$inpfdir/$node_structure .
 cp ../../$inpfdir/$topo_file .
-cp ../../$inpfdir/$oned_vel .
-cp ../../$inpfdir/$data_file .
+cp ../../$inpfdir/$oned_vel_p .
+cp ../../$inpfdir/$data_file_p .
+cp ../../$inpfdir/$oned_vel_s .
+cp ../../$inpfdir/$data_file_s .
 
 cp ../../src/prevel3d .
 cp ../../src/fmm_synt3d_v .
-cp ../../src/genGSnoise .
+cp ../../src/addgns4loc.py .
 cp ../../src/migraloc .
 
 # Generate synthetic P-velocity model from 1D P-velocity model.
@@ -177,15 +179,15 @@ echo "nsotstd = $nsotstd" >> addgns4loc_config.py
 echo "nevn = $nevn" >> addgns4loc_config.py
 echo "nstap = $sta_num_p" >> addgns4loc_config.py
 echo "inpfp = 'syndata_p.txt'" >> addgns4loc_config.py
-echo "outfp = 'syndat_p_init_temp.txt'" >> addgns4loc_config.py
+echo "outfp = 'syndata_p_init_temp.txt'" >> addgns4loc_config.py
 echo "nstas = $sta_num_s" >> addgns4loc_config.py
 echo "inpfs = 'syndata_s.txt'" >> addgns4loc_config.py
 echo "outfs = 'syndata_s_init_temp.txt'" >> addgns4loc_config.py
 python addgns4loc.py
 
 # Migrate the locations above surface below the surface for P wave data.
-echo "syndata_p_init_temp.txt" >> migraloc.inp
-echo "syndata_P_init.txt" >> migraloc.inp
+echo "syndata_p_init_temp.txt" > migraloc.inp
+echo "syndata_p_init.txt" >> migraloc.inp
 echo "$sta_num_p" >> migraloc.inp
 echo "$topo_file" >> migraloc.inp
 echo "$topo_minlon $topo_maxlon" >> migraloc.inp
@@ -194,9 +196,9 @@ echo "$topo_xnum $topo_ynum" >> migraloc.inp
 ./migraloc
 
 # Migrate the locations above surface below the surface for S wave data.
-echo "syndata_s_init_temp.txt" >> migraloc.inp
+echo "syndata_s_init_temp.txt" > migraloc.inp
 echo "syndata_s_init.txt" >> migraloc.inp
-echo "$sta_num_p" >> migraloc.inp
+echo "$sta_num_s" >> migraloc.inp
 echo "$topo_file" >> migraloc.inp
 echo "$topo_minlon $topo_maxlon" >> migraloc.inp
 echo "$topo_minlan $topo_maxlan" >> migraloc.inp

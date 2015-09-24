@@ -2,7 +2,7 @@
 
 # Parameters of working dir
 #######################################################
-wkdir=syn_work
+wkdir=syn_work_p
 inpfdir=syn_outf
 inpfdir_1dv=input_file
 plotdir=syn_plot

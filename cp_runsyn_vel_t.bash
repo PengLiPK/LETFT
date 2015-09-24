@@ -2,7 +2,7 @@
 
 # Parameters of working dir
 #######################################################
-wkdir=syn_work
+wkdir=syn_work_p
 inpfdir=input_file
 #######################################################
 
@@ -28,7 +28,7 @@ vel_pertubation=0.1 # 0.1 is 10% from 1D velocity model.
 
 # Parameters of synthetic travel times construction
 #######################################################
-data_file=p_kila2km_dep20.txt
+data_file=p_data.txt
 sta_num=35
 minlon=204.50
 maxlon=205.20

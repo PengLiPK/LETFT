@@ -2,7 +2,7 @@
 
 # Parameters of working dir
 #######################################################
-wkdir=syn_work
+wkdir=syn_work_p
 inpfdir=input_file
 #######################################################
 
@@ -22,9 +22,9 @@ topo_vair=2.0
 # Parameters of model evaluation
 #######################################################
 damp=100
-nevn=2493
+nevn=1800
 nsl=3264
-ndata=25465
+ndata=30102
 sta_num=35
 minlon=204.50
 maxlon=205.20
