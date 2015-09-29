@@ -1,5 +1,5 @@
 fc=gfortran
-libdir=/nethome/pli/lib
+libdir=../lib
 
 obj_fmmsynt3d = fmm_synt3d_v.o strct.o fmarch.o
 obj_prevel3d = prevel3d.o strct.o
