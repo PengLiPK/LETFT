@@ -9,4 +9,4 @@ Dependencies:
 1. LAPACK Library (For solving linear equation)   
 2. GMT5 (For plotting)
 
-Visti my [Github page](http://penglipk.github.io/LETFT/)
+Visit my [Github page](http://penglipk.github.io/LETFT/)
